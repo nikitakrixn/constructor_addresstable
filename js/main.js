@@ -1,7 +1,7 @@
 jQuery.noConflict();
 jQuery(document).ready(function ($) {
   // Переменные
-  let current_svg, current_price, current_sum = null;
+  let current_svg, current_price = null;
 
   // Цветовая палитра
   $('.popup-adresstable__modal_form').mouseup(function (e) {
@@ -97,9 +97,8 @@ jQuery(document).ready(function ($) {
     if (!isNaN(currentVal) && currentVal <= 32) {
       $('input[name=' + fieldName + ']').val(currentVal + 1);
       $('.information__detail.quantity .detail-subinfo').text(currentVal + 1 + ' шт.')
-      let quantity = parseInt($('input[name=' + fieldName + ']').val());
-
     }
+    printPrice();
   });
 
   // Эта кнопка уменьшает значение до 1
@@ -114,6 +113,7 @@ jQuery(document).ready(function ($) {
       $('input[name=' + fieldName + ']').val(1);
       $('.information__detail.quantity .detail-subinfo').text('1 шт.')
     }
+    printPrice();
   });
 
   // Выбор текущего материала
@@ -129,7 +129,7 @@ jQuery(document).ready(function ($) {
   });
 
   // Изменение адреса
-  $('.constructor-adress .adress-inputs input[name="street"]').on('keyup paste', function () {
+  $('.constructor-adress .adress-inputs input[name="street"]').on('keyup paste change', function () {
     let $this = $(this);
     let value = $this.val();
     let selected = $('#select option:selected');
@@ -145,8 +145,12 @@ jQuery(document).ready(function ($) {
       detailinfo_address.text(value);
       palletre_svg.current_text = value;
       detailinfo_road.text(selected.val() + ',');
+      $('#mainpath')[0].textLength.baseVal.newValueSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_PX, 0);
+      if (value.length >= 8) $('#mainpath')[0].textLength.baseVal.newValueSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_PX, palletre_svg.textLength);
     } else {
-      palletre_svg.current_text = palletre_svg.default_street;
+      $('#mainpath')[0].textLength.baseVal.newValueSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_PX, palletre_svg.textLength);
+      palletre_svg.current_text = null;
+      $('#street-text').text(palletre_svg.default_street);
       detailinfo_address.text('');
       detailinfo_road.text('Неизвестно');
     }
@@ -242,6 +246,10 @@ jQuery(document).ready(function ($) {
 
   // Check
   $('.popup-adresstable__modal_form .modal_form__service_box').on('beforeChange', function(event, slick, currentSlide, nextSlide){
+    if(nextSlide == 12)
+      $('.constructor-materials-card:nth-child(2)').addClass('active').siblings().removeClass('active').hide();
+    else 
+      $('.constructor-materials-card:nth-child(2)').siblings().show();
     current_svg = getItems(nextSlide);
     drawImage();
   });
@@ -256,42 +264,76 @@ jQuery(document).ready(function ($) {
   function drawImage() {
     $('.gallery-svg').html(current_svg.svg);
     palletre_svg.default_street = $('#street-text').text();
+    palletre_svg.textLength = $('#mainpath')[0].textLength.baseVal.valueInSpecifiedUnits;
+    console.log(palletre_svg.textLength);
     changeParams();
     printPrice();
   }
 
   // Изменение таблички
   function changeParams() {
-    if(palletre_svg.current_text) $('#street-text').text(palletre_svg.current_text);
-    if(palletre_svg.current_housenum) $('#housenum-text').text(palletre_svg.current_housenum);
+    shortBuildName(current_svg.id);
     if(palletre_svg.current_build) $('#build-text').text(palletre_svg.current_build);
+    if(palletre_svg.current_text) $('#street-text').text(addtoStreetText(current_svg.id));
+    if(palletre_svg.current_housenum) $('#housenum-text').text(palletre_svg.current_housenum);
+    else palletre_svg.current_housenum = 54;
     if(palletre_svg.color_text) {
       $('#street-text').attr('fill', palletre_svg.color_text);
       $('#housenum-text').attr('fill', palletre_svg.color_text);
       $('#build-text').attr('fill', palletre_svg.color_text);
     }
-    if(palletre_svg.color_table) $('#table-main').attr('fill', palletre_svg.color_table);
+    if(palletre_svg.color_table) {
+      $('#table-main').attr('fill', palletre_svg.color_table);
+    }
+    textfromColorTable(current_svg.id);
   }
 
   // Вывод цены
   function printPrice() {
     let price_draw = $('.constructor-price .price-item strong');
     let price_draw_form = $('.order-form .form-footer .form-footer__price');
+    let current_sum = parseInt($('input[name=quantity]').val());
     if($('.constructor-materials-card:nth-child(1)').is('.active')) {
       if($('.constructor-lamination .lamination-radio input[name="radio-category"]:checked').val() == "Да") 
-      current_price = current_svg.k3mm_white_any; 
-      else current_price = current_svg.k3mm_white;      
+      current_price = parseInt(current_svg.k3mm_white_any) * current_sum; 
+      else current_price = parseInt(current_svg.k3mm_white) * current_sum;      
     } else if ($('.constructor-materials-card:nth-child(2)').is('.active')) {
       if($('.constructor-lamination .lamination-radio input[name="radio-category"]:checked').val() == "Да")
-      current_price = current_svg.k3mm_any;
-      else current_price = current_svg.k3mm;
+      current_price = parseInt(current_svg.k3mm_any) * current_sum;
+      else current_price = parseInt(current_svg.k3mm) * current_sum;
     } else if ($('.constructor-materials-card:nth-child(3)').is('.active')) {
       if($('.constructor-lamination .lamination-radio input[name="radio-category"]:checked').val() == "Да") 
-      current_price = current_svg.price_pvh_any;
-      else current_price = current_svg.price_pvh;
+      current_price = parseInt(current_svg.price_pvh_any) * current_sum;
+      else current_price = parseInt(current_svg.price_pvh) * current_sum;
     }
     price_draw.text(current_price + ' ₽');
     price_draw_form.find('span').text(current_price + ' ₽');
   }
 
+  // Адаптив (короткое наименования строение)
+  function shortBuildName(id) {
+    if(id == '4' || id == '6' || id == '9') palletre_svg.current_build = $('#select option:selected').data('field');
+    else palletre_svg.current_build = $('#select option:selected').val();
+  }
+
+  // Текст как цвет таблички
+  function textfromColorTable(id) {
+    if(id == '1' || id == '10' || id == '11' || id == '15') {
+      if(palletre_svg.color_table)$('#housenum-text').attr('fill', palletre_svg.color_table);
+      else $('#housenum-text').attr('fill', 'blue');
+    }
+    else if (id == '6') {
+      if(palletre_svg.color_table) $('#street-text').attr('fill', palletre_svg.color_table);
+      else $('#street-text').attr('fill', 'blue');
+    }
+  }
+
+  // Добавляет к адресу текст номер дома или наименования строения
+  function addtoStreetText(id) {
+    let text;
+    if(id == '4' || id == '6' || id == '9') text = palletre_svg.current_build + ' ' + palletre_svg.current_text;
+    else if (id == '8' || id == '12') text = palletre_svg.current_text + ', ' + palletre_svg.current_housenum;
+    else text = palletre_svg.current_text;
+    return text;
+  }
 });
