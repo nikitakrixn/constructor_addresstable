@@ -1,0 +1,72 @@
+@font-face {
+    font-family: 'AGKornelia';
+    src: url('AGKornelia.eot');
+    src: url('AGKornelia.eot?#iefix') format('embedded-opentype'),
+        url('AGKornelia.woff2') format('woff2'),
+        url('AGKornelia.woff') format('woff'),
+        url('AGKornelia.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'AcademyCTT';
+    src: url('AcademyC.eot');
+    src: url('AcademyC.eot?#iefix') format('embedded-opentype'),
+        url('AcademyC.woff2') format('woff2'),
+        url('AcademyC.woff') format('woff'),
+        url('AcademyC.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Days';
+    src: url('Days.eot');
+    src: url('Days.eot?#iefix') format('embedded-opentype'),
+        url('Days.woff2') format('woff2'),
+        url('Days.woff') format('woff'),
+        url('Days.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'a_Presentum';
+    src: url('a_Presentum.eot');
+    src: url('a_Presentum.eot?#iefix') format('embedded-opentype'),
+        url('a_Presentum.woff2') format('woff2'),
+        url('a_Presentum.woff') format('woff'),
+        url('a_Presentum.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Bernhard';
+    src: url('Bernhard.eot');
+    src: url('Bernhard.eot?#iefix') format('embedded-opentype'),
+        url('Bernhard.woff2') format('woff2'),
+        url('Bernhard.woff') format('woff'),
+        url('Bernhard.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BrickNews';
+    src: url('BrickNews.eot');
+    src: url('BrickNews.eot?#iefix') format('embedded-opentype'),
+        url('BrickNews.woff2') format('woff2'),
+        url('BrickNews.woff') format('woff'),
+        url('BrickNews.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

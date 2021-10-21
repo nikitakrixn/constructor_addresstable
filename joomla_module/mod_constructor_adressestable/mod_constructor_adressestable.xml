@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension
+	type="module"
+	version="3.5"
+	client="site"
+	method="upgrade">
+	<name>Адресные таблички - Калькулятор / Конструктор</name>
+	<author>Nikita Naidenov</author>
+	<creationDate>October 2021</creationDate>
+	<license>GNU General Public License version 2 or later</license>
+	<authorEmail>krixnliza@ya.ru</authorEmail>
+	<authorUrl>https://krixn.ru</authorUrl>
+	<version>1.0</version>
+	<description>Калькулятор / Конструктор адресных табличек. Это готовое решение. В модуле лишь есть возможность изменять параметры почты</description>
+	<files>
+        <filename module="mod_constructor_adressestable">mod_constructor_adressestable.php</filename>
+        <filename>mod_constructor_adressestable.xml</filename>
+        <folder>tmpl</folder>
+		<folder>assets</folder>
+	</files>
+
+    <config>
+        <fields name="params">
+            <fieldset name="feedbackform" label="Настройки">
+ 
+                <field name="feedback-email" type="email"
+                    label="E-mail"
+                    description="Напишите почтовый ящик, на который хотите получать письма от пользователей."
+                    required="true"
+                    size="30"
+ 
+                    validate="email" />
+ 
+                <field name="feedback_title_form" type="text" default=""
+                    label="Заголовок в форме"
+                    description="Напишите заголовок, который будет отображаться в форме обратной связи перед полями."
+                    size="30" />
+ 
+                <field name="feedback_title" type="text" default=""
+                    label="Заголовок письма"
+                    description="Этот заголовок будет показан в приходящем на почту письме."
+                    required="true"
+                    size="30" />
+ 
+                <field name="feedback_success_message" type="text" default=""
+                    label="Удачная отправка"
+                    description="Сообщение о том, что письмо удалось отправить."
+                    required="true"
+                    size="300" />
+ 
+            </fieldset>
+        </fields>
+    </config>
+</extension>
