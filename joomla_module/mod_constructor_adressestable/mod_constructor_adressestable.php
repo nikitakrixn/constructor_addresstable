@@ -2,6 +2,9 @@
 
 $document = JFactory::getDocument();
 
+// Подключаем хелпер
+require_once __DIR__ . '/helper.php';
+
 // Подключаем стили
 $document->addStyleSheet(JURI::base() . 'modules/mod_constructor_adressestable/assets/fonts/fonts.css');
 $document->addStyleSheet(JURI::base() . 'modules/mod_constructor_adressestable/assets/css/style.css');

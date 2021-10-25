@@ -6,7 +6,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/css/bootstrap-grid.css">
-  <link rel="stylesheet" href="/css/main.min.css">
   <link rel="stylesheet" href="/fonts/fonts.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
@@ -20,12 +19,14 @@
 
 <body>
   <div class="popup-adresstable">
-    <div class="popup-adresstable-button"><div class="popup-adresstable-button__pulse"><div class="calc-icon"></div></div></div>
+    <div class="popup-adresstable-button">
+      <div class="popup-adresstable-button__pulse"></div>
+    </div>
     <div class="popup-adresstable__modal_overlay">
       <!--Модальное окно заказа таблички-->
       <div class="popup-adresstable__modal_form">
         <div class="popup-adresstable__modal_overlay_close"><i class="fas fa-times"></i></div>
-        <div class="col-12 col-md-12">
+        <div class="col-lg-12">
           <h4>Выберите табличку</h4>
           <div class="modal_form__service_box">
             <div class="modal_form__service_box_item">
@@ -79,7 +80,7 @@
           </div>
         </div>
         <div class="modal_form__wrapper">
-          <div class="col-5 col-md-5">
+          <div class="col-lg-5">
             <div class="modal_form__gallery">
               <div class="gallery-for">
                 <div class="gallery-item">
@@ -220,7 +221,7 @@
               </div>
             </div>
           </div>
-          <div class="col-7 col-md-7">
+          <div class="col-lg-7">
             <!-- Конструктор -->
             <div class="modal_form__constructor">
               <div class="constructor-adress">
@@ -272,6 +273,7 @@
                       <button class="color_text__btn dropdown">Цветной</button>
                       <div class="color-picker__paletetre">
                         <ul class="color-avalible-list">
+                          <!-- 1 колонка -->
                           <li class="color-avalible-list__item" data-color="031"></li>
                           <li class="color-avalible-list__item" data-color="404"></li>
                           <li class="color-avalible-list__item" data-color="052"></li>
@@ -306,6 +308,7 @@
                     <button class="color_table__btn dropdown">Выбрать</button>
                     <div class="color-picker__paletetre">
                       <ul class="color-avalible-list">
+                        <!-- 1 колонка -->
                         <li class="color-avalible-list__item" data-color="031"></li>
                         <li class="color-avalible-list__item" data-color="404"></li>
                         <li class="color-avalible-list__item" data-color="052"></li>
@@ -369,7 +372,7 @@
         </div>
         <!-- Форма заказа и данные -->
         <div class="modal_form__wrapper">
-          <div class="col-md-6">
+          <div class="col-lg-6">
             <div class="modal_form__information">
               <h2>Ваш заказ:</h2>
               <div class="information__detail address">
@@ -412,7 +415,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-lg-6">
             <div class="modal_form__order">
               <h2>Ваши данные:</h2>
               <form method="POST" class="order-form">

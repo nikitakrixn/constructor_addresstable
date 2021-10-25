@@ -15,6 +15,7 @@
 	<files>
         <filename module="mod_constructor_adressestable">mod_constructor_adressestable.php</filename>
         <filename>mod_constructor_adressestable.xml</filename>
+        <filename>helper.php</filename>
         <folder>tmpl</folder>
 		<folder>assets</folder>
 	</files>
@@ -30,11 +31,6 @@
                     size="30"
  
                     validate="email" />
- 
-                <field name="feedback_title_form" type="text" default=""
-                    label="Заголовок в форме"
-                    description="Напишите заголовок, который будет отображаться в форме обратной связи перед полями."
-                    size="30" />
  
                 <field name="feedback_title" type="text" default=""
                     label="Заголовок письма"

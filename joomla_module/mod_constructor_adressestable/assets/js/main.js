@@ -1,7 +1,7 @@
 jQuery.noConflict();
 jQuery(document).ready(function ($) {
   // Переменные
-  let current_svg, current_price = null;
+  let current_svg, current_price, textSize, fontSize = 0;
 
   // Цветовая палитра
   $('.popup-adresstable__modal_form').mouseup(function (e) {
@@ -141,12 +141,13 @@ jQuery(document).ready(function ($) {
     }
 
     // Если значение больше 1, то парсим в информации о заказе введенный текст
-    if (value.length >= 1) {
+    if (value.length >= 1 && value.length <= 22) {
       detailinfo_address.text(value);
       palletre_svg.current_text = value;
       detailinfo_road.text(selected.val() + ',');
-      $('#mainpath')[0].textLength.baseVal.newValueSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_PX, 0);
-      if (value.length >= 8) $('#mainpath')[0].textLength.baseVal.newValueSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_PX, palletre_svg.textLength);
+      $('#street-text').attr('font-size', fontSizeChanged(value.length));
+      // $('#mainpath')[0].textLength.baseVal.newValueSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_PX, 0);
+      // if (value.length >= 8) $('#mainpath')[0].textLength.baseVal.newValueSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_PX, palletre_svg.textLength);
     } else {
       $('#mainpath')[0].textLength.baseVal.newValueSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_PX, palletre_svg.textLength);
       palletre_svg.current_text = null;
@@ -249,29 +250,61 @@ jQuery(document).ready(function ($) {
     if(nextSlide == 12)
       $('.constructor-materials-card:nth-child(2)').addClass('active').siblings().removeClass('active').hide();
     else 
-      $('.constructor-materials-card:nth-child(2)').siblings().show();
+      $('.constructor-materials-card').siblings().show();
     current_svg = getItems(nextSlide);
     drawImage();
   });
 
+  // Отправка формы для joomla
+  $('.modal_form__order form.order-form').on('submit', function (e) {
+    e.preventDefault();
+    let postdata = {
+      name: $('.modal_form__order form.order-form input[name="user_name"]').val(),
+      phone: $('.modal_form__order form.order-form input[name="phone"]').val(),
+      address: $('.modal_form__information .information__detail.address .detail-subinfo').text(),
+      material: $('.modal_form__information .information__detail.material .detail-subinfo').text(),
+      quantity: $('.modal_form__information .information__detail.quantity .detail-subinfo').text(),
+      color_text: $('.modal_form__information .information__detail.color-text .detail-subinfo').text(),
+      lamination: $('.modal_form__information .information__detail.lamination .detail-subinfo').text(),
+      color_table: $('.modal_form__information .information__detail.color-table .detail-subinfo').text(),
+      price: $('.modal_form__order .order-form .form-footer .form-footer__price span').text(),
+      option: 'com_ajax',
+      module: 'constructor_adressestable',
+      format: 'json'
+    };
+    $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      data: postdata,
+      success:function(data){
+        console.info(data);
+        $('.modal_form__order').html('<p>Сообщение успешно отправлено!</p>');
+      },
+      error:function(data){
+        console.error(data);
+        alert('Ошибка!!!');
+      }
+    });
+  });
+
   // Получение адресных табличек из массива
-  function getItems(index) {
+  const getItems = (index) => {
     let addresess = item_adresstable.find(item => item.id == index);
     return addresess;
   }
 
   // Вывод изображения
-  function drawImage() {
+  const drawImage = () => {
     $('.gallery-svg').html(current_svg.svg);
     palletre_svg.default_street = $('#street-text').text();
     palletre_svg.textLength = $('#mainpath')[0].textLength.baseVal.valueInSpecifiedUnits;
-    console.log(palletre_svg.textLength);
+    fontSize = parseInt($('#street-text').attr('font-size'));
     changeParams();
     printPrice();
   }
 
   // Изменение таблички
-  function changeParams() {
+  const changeParams = () => {
     shortBuildName(current_svg.id);
     if(palletre_svg.current_build) $('#build-text').text(palletre_svg.current_build);
     if(palletre_svg.current_text) $('#street-text').text(addtoStreetText(current_svg.id));
@@ -289,7 +322,7 @@ jQuery(document).ready(function ($) {
   }
 
   // Вывод цены
-  function printPrice() {
+  const printPrice = () => {
     let price_draw = $('.constructor-price .price-item strong');
     let price_draw_form = $('.order-form .form-footer .form-footer__price');
     let current_sum = parseInt($('input[name=quantity]').val());
@@ -311,13 +344,13 @@ jQuery(document).ready(function ($) {
   }
 
   // Адаптив (короткое наименования строение)
-  function shortBuildName(id) {
+  const shortBuildName = (id) => {
     if(id == '4' || id == '6' || id == '9') palletre_svg.current_build = $('#select option:selected').data('field');
     else palletre_svg.current_build = $('#select option:selected').val();
   }
 
   // Текст как цвет таблички
-  function textfromColorTable(id) {
+  const textfromColorTable = (id) => {
     if(id == '1' || id == '10' || id == '11' || id == '15') {
       if(palletre_svg.color_table)$('#housenum-text').attr('fill', palletre_svg.color_table);
       else $('#housenum-text').attr('fill', 'blue');
@@ -329,11 +362,17 @@ jQuery(document).ready(function ($) {
   }
 
   // Добавляет к адресу текст номер дома или наименования строения
-  function addtoStreetText(id) {
+  const addtoStreetText = (id) => {
     let text;
     if(id == '4' || id == '6' || id == '9') text = palletre_svg.current_build + ' ' + palletre_svg.current_text;
     else if (id == '8' || id == '12') text = palletre_svg.current_text + ', ' + palletre_svg.current_housenum;
     else text = palletre_svg.current_text;
     return text;
+  }
+
+  const fontSizeChanged = (value) => {
+    x = (fontSize / 100) * value;
+    textSize = fontSize = fontSize - 0.9;
+    return textSize;
   }
 });
